@@ -190,9 +190,64 @@ plot(model_fitted3, model_residuals3, xlab = "Fitted Values", ylab = "Residuals"
 abline(h = 0, lty = 2, col = "red")  # Add a dashed line at y = 0 for reference
 
 
+dim(predicted_prices)
+length(mean_predicted_prices)  # Should be 205
+length(actual_prices)  # Should be 205
+
+mean_predicted_prices <- colMeans(predicted_prices)  # Takes mean for each observation
+
+
+length(mean_predicted_prices)  # Should be 205
+length(actual_prices)  # Should be 205
+
+
+results <- data.frame(actual_prices, mean_predicted_prices)
+write.csv(results, "predictions.csv", row.names = FALSE)
+
+getwd()
+
+
+#Calculating preidiction accuracy
 
 
 
 
+install.packages("Metrics")
+
+library(Metrics)
+
+# Read data
+data <- read.csv("predictions.csv")
+
+# Extract actual and predicted values
+actual_prices <- data$actual_prices
+predicted_prices <- data$mean_predicted_prices
+
+# Calculate MAPE manually
+mape_value <- mean(abs((actual_prices - predicted_prices) / actual_prices)) * 100
+
+# Compute accuracy
+accuracy <- 100 - mape_value
+
+# Print accuracy
+print(paste("Prediction Accuracy:", round(accuracy, 2), "%"))
+
+str(data)  # Check structure of the dataset
+summary(data)  # Get basic statistics
+
+head(actual_prices)
+head(predicted_prices)
+
+actual_prices <- exp(actual_prices)
+predicted_prices <- exp(predicted_prices)
+
+
+error_values <- abs(actual_prices - predicted_prices)
+summary(error_values)  # Look for very large errors
+
+
+mape_value <- mean(abs((actual_prices - predicted_prices) / actual_prices)) * 100
+accuracy <- 100 - mape_value
+print(paste("Updated Prediction Accuracy:", round(accuracy, 2), "%"))
 
 
